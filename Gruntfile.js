@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
 
     grunt.registerTask( 'default', [ 'clean', 'browserify', 'sass', 'autoprefixer', 'copy', 'hapi', 'watch'] );
-    
+
     grunt.initConfig({
         browserify: {
             dist: {
@@ -32,11 +32,11 @@ module.exports = function(grunt) {
 
         watch: {
             hapi: {
-                files: [ 
-                    './app/scripts/**/*.js', 
-                    './app/sass/**/*.scss', 
-                    './app/pages/**/*.html', 
-                    './app/templates/**/*.html', 
+                files: [
+                    './app/scripts/**/*.js',
+                    './app/sass/**/*.scss',
+                    './app/pages/**/*.html',
+                    './app/templates/**/*.html',
                     'Gruntfile.js'
                 ],
                 tasks: [ 'hapi' ],
