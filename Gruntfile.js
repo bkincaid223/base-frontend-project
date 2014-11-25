@@ -2,6 +2,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask( 'default', [ 'clean', 'browserify', 'sass', 'autoprefixer', 'copy', 'hapi', 'watch'] );
 
+    grunt.registerTask('build', [ 'clean', 'browserify', 'sass', 'autoprefixer', 'copy' ] );
+
     grunt.initConfig({
         browserify: {
             dist: {
