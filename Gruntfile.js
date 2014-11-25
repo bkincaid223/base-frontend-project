@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
 
-    grunt.registerTask( 'default', [ 'clean', 'browserify', 'sass', 'autoprefixer', 'copy', 'connect', 'watch'] );
+    grunt.registerTask( 'default', [ 'clean', 'browserify', 'sass', 'autoprefixer', 'copy', 'hapi', 'watch'] );
     
     grunt.initConfig({
         browserify: {
@@ -31,7 +31,7 @@ module.exports = function(grunt) {
         },
 
         watch: {
-            dist: {
+            hapi: {
                 files: [ 
                     './app/scripts/**/*.js', 
                     './app/sass/**/*.scss', 
@@ -39,7 +39,10 @@ module.exports = function(grunt) {
                     './app/templates/**/*.html', 
                     'Gruntfile.js'
                 ],
-                tasks: [ 'default' ]
+                tasks: [ 'hapi' ],
+                options: {
+                    spawn: false
+                }
             }
         },
 
@@ -64,15 +67,15 @@ module.exports = function(grunt) {
             }
         },
 
-        connect: {
-          server: {
-            options: {
-              port: 3000,
-              hostname: 'localhost',
-              base: './dist',
-              useAvailablePort: true
+        hapi: {
+            custom_options: {
+                options: {
+                    server: require('path').resolve('./server'),
+                    bases: {
+                        '/dist': require('path').resolve('./dist/')
+                    }
+                }
             }
-          }
         },
 
         clean: ['./dist']
@@ -82,7 +85,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-hapi');
     grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-autoprefixer');
 };
