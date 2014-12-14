@@ -1,12 +1,24 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Bloc Base Project</title>
-    <link rel="stylesheet" href="/css/style.css">
+<head>
+    
+    
+    <title>Bloc Projects</title>
+    <style>
+    ul { list-style: none; padding: 0; margin: 0; width: 500px; }
+    li { border: 1px solid #ccc; background: #eee; padding: 5px 10px; color: #000; }
+    li span { padding-left: 10px; cursor: default;} 
+    .checked { text-decoration: line-through; font-weight: bold; color: #c00; }
+    </style>
 </head>
-<body>
+    <body>
+        
+    <h1> To-do List</h1>
+        <p><input type="text" id="inItemText"/></p>
+        
+        <ul id="todoList"></ul>
 
-    <script src="/js/app.js"></script>
-</body>
+        <script src="/js/app.js"></script>
+        
+    </body>
 </html>
