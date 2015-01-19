@@ -1,24 +1,43 @@
-<!DOCTYPE html>
-<html>
-<head>
-    
-    
-    <title>Bloc Projects</title>
-    <style>
-    ul { list-style: none; padding: 0; margin: 0; width: 500px; }
-    li { border: 1px solid #ccc; background: #eee; padding: 5px 10px; color: #000; }
-    li span { padding-left: 10px; cursor: default;} 
-    .checked { text-decoration: line-through; font-weight: bold; color: #c00; }
-    </style>
+<!doctype html>
+<html ng-app="app">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title></title>
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+       
 </head>
-    <body>
-        
-    <h1> To-do List</h1>
-        <p><input type="text" id="inItemText"/></p>
-        
-        <ul id="todoList"></ul>
+ <body ng-controller="TodoCtrl">    
+      <section id="todoapp">
+        <header id="header">
+          <h1>TodoList</h1>
+          <form action="#" id="todo-form" ng-submit="addTodo()">
+            <input type="text" id="new-todo" placeholder="What needs to be done?" autofocus autocomplete="off" ng-model="remaining">
+          </form>
+        </header>
 
-        <script src="/js/app.js"></script>
+        <section id="main">
+          <input type="checkbox" id="toggle-all" ng-model="allchecked" ng-click="checkAllTodo(allchecked)">
+            <ul id="todo-list">
+            <li ng-repeat="todo in todos" ng-class="{completed : todo.completed}">
+              <div class="view">
+                <input type="checkbox" class="toggle" ng-model="todo.completed">
+                <label>{{todo.name}}</label>
+                <button class="destroy" ng-click="removeTodo($index)"></button>
+                </div>
+              </li>
+            </ul>
+        </section>
+          
+          <footer id="footer">
+          <span id="todo-count"><strong>{{remaining}}</strong>Text Here</span>
+          </footer>
         
+
+      </section>
+         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.min.js"></script>
+
+
+         <script type="text/javascript" src="dist/js/app.js"></script>
     </body>
 </html>
