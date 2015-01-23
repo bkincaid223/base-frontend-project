@@ -1,31 +1,25 @@
-var app = angular.module('app', []);
+var app = angular.module('my-app', [], function () {
 
-app.controller('TodoCtrl', [function($scope, $filter){  
- 
-    var todos = [];
-    var newtodo = '';
+})
 
-    $scope.$watch('todos', function(){
-        $scope.remaining = $filter($scope, todos, {completed:false}).length;
-        $scope.allchecked = !$scope.remaining;
-    }, true);
-    
-    $scope.removeTodo = function(index){
-        $scope.todos.splice(index,1);
-    };
-    
-    $scope.addTodo = function(){
-        $scope.todos.push({
-            name: $scope.newtodo, 
-            completed: false
-        });
+app.controller('AppController', function ($scope) {
+  $scope.todos = []; // create the todos array
+  
+  $scope.getTotalTodos = function () {
+    return $scope.todos.length; // get the length of the todos array
+  };
+  
+  $scope.addTodo = function () {
+    $scope.todos.push({text:$scope.formTodoText, done:false});
+    $scope.formTodoText = '';
+  };
+  
+  $scope.clearCompleted = function () {
+    // iterating through the $scope.todos array
+    for(var i=0; i<=$scope.todos.length; i++) {
+      if ($scope.todos[i].done === true) {
+          $scope.todos.splice(i,1); // if todo.done is true, we remove it from the array with .splice()
+      }
     }
-    
-    $scope.checkAllTodo = function(allchecked){
-        $scope.todos.forEach(function(todo){
-            todo.completed = allchecked;
-        })
-    }     
-}]);
-
-// todos: newTodo: name, completed
+  };
+})

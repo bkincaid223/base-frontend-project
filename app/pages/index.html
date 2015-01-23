@@ -1,43 +1,27 @@
-<!doctype html>
-<html ng-app="app">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <title></title>
-        <link rel="stylesheet" type="text/css" href="/css/style.css">
-       
-</head>
- <body ng-controller="TodoCtrl">    
-      <section id="todoapp">
-        <header id="header">
-          <h1>TodoList</h1>
-          <form action="#" id="todo-form" ng-submit="addTodo()">
-            <input type="text" id="new-todo" placeholder="What needs to be done?" autofocus autocomplete="off" ng-model="remaining">
-          </form>
-        </header>
+<html ng-app="my-app">
+  <head lang="en">
+    <meta charset="utf-8">
+         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+         <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
-        <section id="main">
-          <input type="checkbox" id="toggle-all" ng-model="allchecked" ng-click="checkAllTodo(allchecked)">
-            <ul id="todo-list">
-            <li ng-repeat="todo in todos" ng-class="{completed : todo.completed}">
-              <div class="view">
-                <input type="checkbox" class="toggle" ng-model="todo.completed">
-                <label>{{todo.name}}</label>
-                <button class="destroy" ng-click="removeTodo($index)"></button>
-                </div>
-              </li>
-            </ul>
-        </section>
-          
-          <footer id="footer">
-          <span id="todo-count"><strong>{{remaining}}</strong>Text Here</span>
-          </footer>
-        
-
-      </section>
-         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
-         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.min.js"></script>
-
-
-         <script type="text/javascript" src="dist/js/app.js"></script>
-    </body>
+    <script src="app.js"></script>
+  </head>
+  
+  <body ng-controller="AppController">
+    <div>
+      <h2>You have <span>{{getTotalTodos()}}</span> todos!</h2>
+      <ul>
+        <li ng-repeat="todo in todos"> <!-- setting up the repeater-->
+          <input type="checkbox" ng-model="todo.done"/> <!-- adding an ng=model to apply to the checkbox, which tells us if the checkbox is true (checked) or false (unchecked) -->
+          <span>{{todo.text}} -- Completed: {{todo.done}}</span> <!-- here's todo.done in action -->
+        </li>
+      </ul>
+      <form>
+        <input placeholder="Insert todo here!" type="text" ng-model="formTodoText"/>
+        <button ng-click="addTodo()">Add Todo</button> <!-- on click, we add the todo to our list -->
+      </form>
+      <br/>
+      <button class="clear-btn" ng-click="clearCompleted()">Clear completed</button> <!-- removes completed (checked) todos -->
+    </div>
+  </body>
 </html>
