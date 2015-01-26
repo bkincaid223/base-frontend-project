@@ -1,25 +1,23 @@
-var app = angular.module('my-app', [], function () {
-
-})
-
-app.controller('AppController', function ($scope) {
-  $scope.todos = []; // create the todos array
+function TodoCtrl($scope) {
+  
+  $scope.todos = [
+    {text:'Learn AngularJS', done:false},         
+    {text: 'Build an app', done:false}
+  ];
   
   $scope.getTotalTodos = function () {
-    return $scope.todos.length; // get the length of the todos array
+    return $scope.todos.length;
   };
+  
   
   $scope.addTodo = function () {
     $scope.todos.push({text:$scope.formTodoText, done:false});
     $scope.formTodoText = '';
   };
   
-  $scope.clearCompleted = function () {
-    // iterating through the $scope.todos array
-    for(var i=0; i<=$scope.todos.length; i++) {
-      if ($scope.todos[i].done === true) {
-          $scope.todos.splice(i,1); // if todo.done is true, we remove it from the array with .splice()
-      }
-    }
-  };
-})
+    $scope.clearCompleted = function () {
+        $scope.todos = _.filter($scope.todos, function(todo){
+            return !todo.done;
+        });
+    };
+}

@@ -1,27 +1,112 @@
-<html ng-app="my-app">
+<!DOCTYPE html>
+<html>
   <head lang="en">
     <meta charset="utf-8">
-         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
-         <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<!-- Include AngularJS -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
+<!-- Include Bootstrap -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
-    <script src="app.js"></script>
+<!-- stylesheet -->     
+ <link rel="stylesheet" type="text/css" href="/css/style.css"></script>     
+<!-- Include Firebase -->
+<script src='https://cdn.firebase.com/v0/firebase.js'></script>
+<script src='https://cdn.firebase.com/libs/angularfire/0.3.0/angularfire.min.js'></script>
+
+
+
   </head>
   
-  <body ng-controller="AppController">
-    <div>
-      <h2>You have <span>{{getTotalTodos()}}</span> todos!</h2>
-      <ul>
-        <li ng-repeat="todo in todos"> <!-- setting up the repeater-->
-          <input type="checkbox" ng-model="todo.done"/> <!-- adding an ng=model to apply to the checkbox, which tells us if the checkbox is true (checked) or false (unchecked) -->
-          <span>{{todo.text}} -- Completed: {{todo.done}}</span> <!-- here's todo.done in action -->
-        </li>
-      </ul>
-      <form>
-        <input placeholder="Insert todo here!" type="text" ng-model="formTodoText"/>
-        <button ng-click="addTodo()">Add Todo</button> <!-- on click, we add the todo to our list -->
-      </form>
-      <br/>
-      <button class="clear-btn" ng-click="clearCompleted()">Clear completed</button> <!-- removes completed (checked) todos -->
-    </div>
-  </body>
+ <body ng-app="todo">
+
+      <section id="todoapp" ng-controller="TodoCtrl">
+        <header id="header">
+          <h1>Todo-List</h1>
+          <form id="todo-form" ng-submit="addTodo()">
+            <input type="text" id="new-todo" placeholder="What do you need to do?" autofocus autocomplete="off" ng-model="newtodo">
+          </form>
+        </header>
+
+        <section id="main">
+          <input type="checkbox" id="toggle-all" ng-model="allchecked" ng-click="checkAllTodo(allchecked)">
+          <ul id="todo-list">
+            <li ng-repeat="todo in todos | filter:statusFilter" ng-class="{completed : todo.completed, editing: todo.editing}" ng-dblclick="todo.editing = true">
+              <div class="view">
+                <input type="checkbox" class="toggle" ng-model="todo.completed">
+                <label>{{todo.name}}</label>
+                <button class="destroy" ng-click="removeTodo($index)"></button>
+              </div>
+              <form action="#">
+                <input class="edit" ng-model="todo.name" ng-blur="editTodo(todo)">
+              </form>
+            </li>
+          </ul>
+        </section>
+
+        <footer id="footer">
+          <span id="todo-count"><strong>{{remaining}}</strong> List of Todos</span>
+          <ul id="filters">
+            <li><a href="#/" ng-class="{selected: location.path() == '/'}">All</a></li>
+            <li><a href="#/active" ng-class="{selected: location.path() == '/active'}">Incomplete</a></li>
+            <li><a href="#/done" ng-class="{selected: location.path() == '/done'}">Complete</a></li>
+          </ul>
+        </footer>
+
+      </section>
+<script>
+var app = angular.module('todo', []);
+function TodoCtrl($scope) {
+app.directive('ngBlur', function(){
+	return function(scope, elem, attrs){
+		elem.bind('blur', function(){
+			scope.$apply(attrs.ngBlur);
+		})
+	}
+})
+}
+
+app.controller('TodoCtrl', function($scope, filterFilter, $http, $location){
+	$scope.todos = [
+	];
+
+	$scope.$watch('todos', function(){
+		$scope.remaining = filterFilter($scope.todos, {completed:false}).length;
+		$scope.allchecked = !$scope.remaining;
+	}, true)
+
+	if($location.path() == ''){ $location.path('/')}
+	$scope.location = $location;
+	$scope.$watch('location.path()', function(path){
+		$scope.statusFilter =
+			(path == '/active') ? {completed : false} :
+			(path == '/done') ? {completed : true} :
+			null;
+	});
+
+
+	$scope.removeTodo = function(index){
+		$scope.todos.splice(index,1);
+	}
+
+	$scope.addTodo = function(){
+		$scope.todos.push({
+			name : $scope.newtodo,
+			completed : false
+		});
+		$scope.newtodo = '';
+		return false;
+	}
+
+	$scope.editTodo = function(todo){
+		todo.editing = false;
+	}
+
+	$scope.checkAllTodo = function(allchecked){
+		$scope.todos.forEach(function(todo){
+			todo.completed = allchecked;
+		})
+	}
+});
+</script>
+    </body>
 </html>
