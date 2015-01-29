@@ -3,7 +3,7 @@
   <head lang="en">
     <meta charset="utf-8">
 <!-- Include AngularJS -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.2/angular.min.js"></script>
 <!-- Include Bootstrap -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
@@ -54,6 +54,7 @@
 
       </section>
 <script>
+
 var app = angular.module('todo', []);
 function TodoCtrl($scope) {
 app.directive('ngBlur', function(){
@@ -65,7 +66,7 @@ app.directive('ngBlur', function(){
 })
 }
 
-app.controller('TodoCtrl', function($scope, filterFilter, $http, $location){
+app.controller('TodoCtrl', function($scope, filterFilter, $http, $location, $interval){
 	$scope.todos = [
 	];
 
@@ -105,7 +106,11 @@ app.controller('TodoCtrl', function($scope, filterFilter, $http, $location){
 		$scope.todos.forEach(function(todo){
 			todo.completed = allchecked;
 		})
+		
+	$interval(function(){ $scope.checkAllTodo(); }, 3000);
+
 	}
+
 });
 </script>
     </body>
