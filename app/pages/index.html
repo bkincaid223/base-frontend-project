@@ -1,25 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="todo">
   <head lang="en">
     <meta charset="utf-8">
-<!-- Include AngularJS -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.2/angular.min.js"></script>
-<!-- Include Bootstrap -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-
-<!-- stylesheet -->     
- <link rel="stylesheet" type="text/css" href="/css/style.css"></script>     
-<!-- Include Firebase -->
-<script src='https://cdn.firebase.com/v0/firebase.js'></script>
-<script src='https://cdn.firebase.com/libs/angularfire/0.3.0/angularfire.min.js'></script>
-
-
-
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">   
+	 <link rel="stylesheet" type="text/css" href="/css/style.css"> 
+	<script src='https://cdn.firebase.com/v0/firebase.js'></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.js"></script>
+	<script src='https://cdn.firebase.com/libs/angularfire/0.3.0/angularfire.min.js'></script>
+	<script src="/js/app.js"></script>
   </head>
   
- <body ng-app="todo">
+ <body ng-controller="TodoCtrl">
 
-      <section id="todoapp" ng-controller="TodoCtrl">
+      <section id="todoapp">
         <header id="header">
           <h1>Todo-List</h1>
           <form id="todo-form" ng-submit="addTodo()">
@@ -42,6 +35,13 @@
             </li>
           </ul>
         </section>
+        <section>
+        	<ul>
+        		<li ng-repeat="expiredTodo in expiredTodos">
+        			<label>{{expiredTodo.name}}</label>
+        		</li>
+        	</ul>
+        </section>
 
         <footer id="footer">
           <span id="todo-count"><strong>{{remaining}}</strong> List of Todos</span>
@@ -51,67 +51,6 @@
             <li><a href="#/done" ng-class="{selected: location.path() == '/done'}">Complete</a></li>
           </ul>
         </footer>
-
       </section>
-<script>
-
-var app = angular.module('todo', []);
-function TodoCtrl($scope) {
-app.directive('ngBlur', function(){
-	return function(scope, elem, attrs){
-		elem.bind('blur', function(){
-			scope.$apply(attrs.ngBlur);
-		})
-	}
-})
-}
-
-app.controller('TodoCtrl', function($scope, filterFilter, $http, $location, $interval){
-	$scope.todos = [
-	];
-
-	$scope.$watch('todos', function(){
-		$scope.remaining = filterFilter($scope.todos, {completed:false}).length;
-		$scope.allchecked = !$scope.remaining;
-	}, true)
-
-	if($location.path() == ''){ $location.path('/')}
-	$scope.location = $location;
-	$scope.$watch('location.path()', function(path){
-		$scope.statusFilter =
-			(path == '/active') ? {completed : false} :
-			(path == '/done') ? {completed : true} :
-			null;
-	});
-
-
-	$scope.removeTodo = function(index){
-		$scope.todos.splice(index,1);
-	}
-
-	$scope.addTodo = function(){
-		$scope.todos.push({
-			name : $scope.newtodo,
-			completed : false
-		});
-		$scope.newtodo = '';
-		return false;
-	}
-
-	$scope.editTodo = function(todo){
-		todo.editing = false;
-	}
-
-	$scope.checkAllTodo = function(allchecked){
-		$scope.todos.forEach(function(todo){
-			todo.completed = allchecked;
-		})
-		
-	$interval(function(){ $scope.checkAllTodo(); }, 3000);
-
-	}
-
-});
-</script>
     </body>
 </html>
