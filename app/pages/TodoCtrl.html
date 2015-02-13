@@ -1,0 +1,16 @@
+section id="main">
+          <input type="checkbox" id="toggle-all" ng-model="allchecked" ng-click="checkAllTodo(allchecked)">
+          <ul id="todo-list">
+            <li ng-repeat="todo in todos | filter:statusFilter" ng-class="{completed : todo.completed, editing: todo.editing}" ng-dblclick="todo.editing = true">
+              <div class="view">
+                <input type="checkbox" class="toggle" ng-model="todo.completed">
+                <label>{{todo.name}}</label>
+                <button class="destroy" ng-click="removeTodo($index)"></button>
+              </div>
+              <form action="#">
+                <input class="edit" ng-model="todo.name" ng-blur="editTodo(todo)">
+              </form>
+            </li>
+          </ul>
+        </section>
+          <section>
