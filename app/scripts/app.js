@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 var app = angular.module('todo', ['firebase'], ['ui.router']);
-=======
-var app = angular.module('todo', []);
->>>>>>> FETCH_HEAD
 
 app.directive('ngBlur', function(){
   return function(scope, elem, attrs){
@@ -11,42 +7,31 @@ app.directive('ngBlur', function(){
     })
   }
 })
-<<<<<<< HEAD
 
 app.config(['$stateProvider', '$locationProvider', function($stateProvider, $locationProvider){
     $locationProvider.html5Mode(true);
     
 $stateProvider.state('completed', {
     url:'/',
-    controller:'completed.controller',
+    controller:'TodoCtrl',
     templateUrl: '/pages/completed.html'
     });
+  //create routes for expired and incomplete tasks
 }]);
-
-app.controller('completed.controller', ['$scope', function($scope){
     
-app.controller('TodoCtrl', ['$scope', '$interval',function($scope, $angularFire, $interval){
+app.controller('TodoCtrl', ['$scope', '$fireBase', '$interval',function($scope, $fireBase, $interval){
+  var ref = new Firebase('https://todoapp12.firebaseio.com');
   
-  var fireData = new Firebase('https://todoapp12.firebaseio.com');
-    
-  $angularFire(fireData, $scope,'todos');
+  // create an AngularFire reference to the data
+  var sync = $firebase(ref);
     
   $scope.todos = [];
   $scope.expiredTodos = [];
-  
-  
-=======
-app.controller('TodoCtrl', ['$scope', '$interval', function($scope, $interval){
-  $scope.todos = [];
-  $scope.expiredTodos = [];
->>>>>>> FETCH_HEAD
-
-$scope.expireTodo = function(todo){
+  $scope.expireTodo = function(todo){
     console.log(todo);
     $scope.expiredTodos.push(todo);
     $scope.todos.splice(todo,1);
     console.log("We finished expireTodo! Here's what's expired: " + $scope.expiredTodos);
-<<<<<<< HEAD
   };
 
   $scope.addTodo = function(){
@@ -58,19 +43,6 @@ $scope.expireTodo = function(todo){
     return false;
   };
 
-=======
-  };
-
-  $scope.addTodo = function(){
-    $scope.todos.push({
-      name : $scope.newtodo,
-      completed : false
-    });
-    $scope.newtodo = '';
-    return false;
-  };
-
->>>>>>> FETCH_HEAD
   $scope.editTodo = function(todo){
     todo.editing = false;
   };
@@ -88,9 +60,7 @@ $scope.expireTodo = function(todo){
 
  $interval(function(){ $scope.checkAllTodo(); }, 3000);
 
-<<<<<<< HEAD
+ // download the data into a local object
+ $scope.data = sync.$asObject();
+
 }]);
-}
-=======
-}]);
->>>>>>> FETCH_HEAD
