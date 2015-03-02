@@ -1,4 +1,4 @@
-var app = angular.module('todo', ['firebase'], ['ui.router']);
+var app = angular.module('todo', ['firebase', 'ui.router']);
 
 app.directive('ngBlur', function(){
   return function(scope, elem, attrs){
@@ -6,7 +6,7 @@ app.directive('ngBlur', function(){
       scope.$apply(attrs.ngBlur);
     })
   }
-})
+});
 
 app.config(['$stateProvider', '$locationProvider', function($stateProvider, $locationProvider){
     $locationProvider.html5Mode(true);
@@ -19,11 +19,14 @@ $stateProvider.state('completed', {
   //create routes for expired and incomplete tasks
 }]);
     
-app.controller('TodoCtrl', ['$scope', '$fireBase', '$interval',function($scope, $fireBase, $interval){
+app.controller('TodoCtrl', ['$scope', '$fireBase', '$interval', function($scope, $fireBase, $interval){
   var ref = new Firebase('https://todoapp12.firebaseio.com');
   
   // create an AngularFire reference to the data
   var sync = $firebase(ref);
+
+  // download the data into a local object
+  $scope.data = sync.$asObject();
     
   $scope.todos = [];
   $scope.expiredTodos = [];
@@ -31,7 +34,7 @@ app.controller('TodoCtrl', ['$scope', '$fireBase', '$interval',function($scope, 
     console.log(todo);
     $scope.expiredTodos.push(todo);
     $scope.todos.splice(todo,1);
-    console.log("We finished expireTodo! Here's what's expired: " + $scope.expiredTodos);
+    console.log("We finished expireTodo! Here's what's expired: " +               $scope.expiredTodos);
   };
 
   $scope.addTodo = function(){
@@ -59,8 +62,5 @@ app.controller('TodoCtrl', ['$scope', '$fireBase', '$interval',function($scope, 
   };
 
  $interval(function(){ $scope.checkAllTodo(); }, 3000);
-
- // download the data into a local object
- $scope.data = sync.$asObject();
 
 }]);
