@@ -13,7 +13,7 @@
               <div class="view">
                 <input type="checkbox" class="toggle" ng-model="todo.completed">
                 <label>{{todo.name}}</label>
-                <button class="destroy" ng-click="removeTodo($index)"></button>
+                <button class="destroy" ng-click="todos.$remove(todo)"></button>
               </div>
               <form action="#">
                 <input class="edit" ng-model="todo.name" ng-blur="editTodo(todo)">

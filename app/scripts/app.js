@@ -1,31 +1,21 @@
 var app = angular.module('todo', ['firebase']);
 
-function TodoCtrl($scope, angularFire) {
-    
-    
-    angularFire(fireData, $scope, 'todo');
-    
-    
-app.directive('ngBlur', function(){
-	return function(scope, elem, attrs){
-		elem.bind('blur', function(){
-			scope.$apply(attrs.ngBlur);
-		})
-	}
-})
-}
 app.controller('TodoCtrl', function($scope, $firebaseArray, filterFilter, $http, $location, $interval){
     
+	/* app.directive('ngBlur', function(){
+		return function(scope, elem, attrs){
+			elem.bind('blur', function(){
+				scope.$apply(attrs.ngBlur);
+			})
+		}
+	})*/
      var ref = new Firebase('https://angular-todoapp223.firebaseio.com');
-  
-
-
-	$scope.todos = [
-	];
+	$scope.todos = $firebaseArray(ref);
 	$scope.$watch('todos', function(){
 		$scope.remaining = filterFilter($scope.todos, {completed:false}).length;
 		$scope.allchecked = !$scope.remaining;
 	}, true)
+
 	if($location.path() == ''){ $location.path('/')}
 	$scope.location = $location;
 	$scope.$watch('location.path()', function(path){
@@ -34,13 +24,13 @@ app.controller('TodoCtrl', function($scope, $firebaseArray, filterFilter, $http,
 			(path == '/done') ? {completed : true} :
 			null;
 	});
-	$scope.removeTodo = function(index){
-		$scope.todos.splice(index,1);
-	}
+
 	$scope.addTodo = function(){
-		$scope.todos.push({
-			name : $scope.newtodo,
-			completed : false
+		$scope.todos.$add({
+			name: $scope.newtodo,
+			completed: false,
+			created: new Date(),
+			expired: false,
 		});
 		$scope.newtodo = '';
 		return false;
@@ -48,16 +38,20 @@ app.controller('TodoCtrl', function($scope, $firebaseArray, filterFilter, $http,
 	$scope.editTodo = function(todo){
 		todo.editing = false;
 	}
-	$scope.checkAllTodo = function(allchecked){
-		$scope.todos.forEach(function(todo){
-      if (todo.completed) {
-        console.log(todo);
-        console.log("Removing " + todo.name);
-        $scope.expireTodo(todo);
-      }
-      console.log("Checking!");
-		})
-		
-	$interval(function(){ $scope.checkAllTodo(); }, 3000);
+
+	var expiredTodo = function(todo){
+
 	}
+	var checkAllTodo = function(){
+		console.log("CHECKING..");
+		$scope.todos.forEach(function(todo){
+      		if (todo.completed) {
+	        	console.log(todo);
+	        	console.log("Removing " + todo.name);
+	        	expireTodo(todo);
+      		}
+		});
+	}
+
+	$interval(checkAllTodo, 5000);
 });
