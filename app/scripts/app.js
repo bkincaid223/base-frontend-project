@@ -40,7 +40,7 @@ app.controller('TodoCtrl', function($scope, $firebaseArray, filterFilter, $http,
 	}
 
 	var expiredTodo = function(todo){
-
+		// nothing here yet
 	}
 	var checkAllTodo = function(){
 		console.log("CHECKING..");
